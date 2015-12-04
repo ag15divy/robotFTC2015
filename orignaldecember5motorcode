@@ -1,0 +1,103 @@
+package com.qualcomm.ftcrobotcontroller.opmodes;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
+
+
+public class PractDriveandBox extends OpMode{
+
+
+    DcMotor motorFrontRight, motorFrontLeft, motorBackRight, motorBackLeft;
+    DcMotor motorIntake;
+    DcMotor motorExtender, motorExtender2;
+    DcMotor motorTurner;
+
+    public void init() {
+
+
+        motorFrontRight = hardwareMap.dcMotor.get("motor_1");
+        motorBackRight = hardwareMap.dcMotor.get("motor_2");
+        motorFrontLeft = hardwareMap.dcMotor.get("motor_3");
+        motorBackLeft = hardwareMap.dcMotor.get("motor_4");
+        motorIntake = hardwareMap.dcMotor.get("motor_5");
+        motorExtender = hardwareMap.dcMotor.get("motor_6");
+        motorExtender2 = hardwareMap.dcMotor.get("motor_7");
+        motorTurner = hardwareMap.dcMotor.get("motor_8");
+
+
+    }
+
+    @Override
+    public void loop() {
+        drive(gamepad1.right_stick_y, gamepad1.left_stick_y);
+        intake();
+        extenders();
+        boxdirection();
+
+
+    }
+
+
+    public void drive(double right, double left){
+        motorFrontRight.setPower(right);
+        motorBackRight.setPower(right);
+        motorBackLeft.setPower(-left);
+        motorFrontLeft.setPower(-left);
+    }
+
+    public void intake(){
+
+        if (gamepad2.a == true){
+            motorIntake.setPower(1.0);
+        }
+        else{
+            motorIntake.setPower(0.0);
+        }
+        if (gamepad2.y== true){
+            motorIntake.setPower(-1.0);
+        }
+        else{
+            motorIntake.setPower(0.0);
+        }
+    }
+    public void extenders(){
+        
+        if( gamepad2.dpad_up == true){
+            motorExtender.setPower(1.0);
+            motorExtender2.setPower(1.0);
+        }
+        else {
+            motorExtender.setPower(0.0);
+            motorExtender2.setPower(0.0);
+        }
+        if( gamepad2.dpad_down == true){
+            motorExtender.setPower(-1.0);
+            motorExtender2.setPower(-1.0);
+        }
+        else {
+            motorExtender.setPower(0.0);
+            motorExtender2.setPower((0.0));
+        }
+    }
+
+    public void boxdirection(){
+        if( gamepad1.dpad_left){
+            motorTurner.setPower(-1.0);
+        }
+        else {
+            motorTurner.setPower(0.0);
+        }
+        if( gamepad2.dpad_right){
+            motorTurner.setPower(1.0);
+        }
+        else {
+            motorTurner.setPower(0.0);
+        }
+    }
+
+
+}
