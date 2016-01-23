@@ -15,63 +15,39 @@ public class ftcautotry1 extends OpMode
     DcMotor leftMotor;
     DcMotor backRight;
     DcMotor backLeft;
-    //DcMotor outtake;
-
-
-    final static int ENCODER_CPR = 1120;
-    final static int GEAR_RATIO = 2;
-    final static int WHEEL_DIAMETER = 6;
-    final static double DISTANCE = 37.68;
-
-    final static double CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER;
-    final static double ROTATIONS = DISTANCE / CIRCUMFERENCE;
-    final static double COUNTS = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
-
-
+    DcMotor outtake;
+    int seconds;
 
     public void init() {
-
         //name the motors
-        leftMotor = hardwareMap.dcMotor.get("left_drive");
-        rightMotor = hardwareMap.dcMotor.get("right_drive");
-        backLeft = hardwareMap.dcMotor.get("back_left");
-        backRight = hardwareMap.dcMotor.get("back_right");
-        //outtake = hardwareMap.dcMotor.get("outtake");
-
-        rightMotor.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.REVERSE);
-
-
-        leftMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        rightMotor.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        leftMotor = hardwareMap.dcMotor.get("motor_3");
+        rightMotor = hardwareMap.dcMotor.get("motor_1");
+        backLeft = hardwareMap.dcMotor.get("motor_4");
+        backRight = hardwareMap.dcMotor.get("motor_2");
+        outtake = hardwareMap.dcMotor.get("motor_5");
+        //reverse the motor direction
+        leftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        //reset the encoders to 0
     }
-
-
-    public void start() {
-        leftMotor.setTargetPosition((int) COUNTS);
-        rightMotor.setTargetPosition((int) COUNTS);
-
-        leftMotor.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        rightMotor.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-
-        leftMotor.setPower(0.5);
-        rightMotor.setPower(0.5);
-
-        if(leftMotor.isBusy() && rightMotor.isBusy()){
-            backRight.setPower(0.5);
-            backLeft.setPower(0.5);
-            //outtake.setPower(0.5);
-        }
-        else
-            backLeft.setPower(0.0);
-            backRight.setPower(0.0);
-            //outtake.setPower(0.0);
-    }
-
 
     public void loop() {
-        telemetry.addData("Motor Target", COUNTS);
-        telemetry.addData("Left Position", leftMotor.getCurrentPosition());
-        telemetry.addData("Right Position", rightMotor.getCurrentPosition());
+
+        if (seconds < 650) {
+            leftMotor.setPower(0.5);
+            rightMotor.setPower(0.5);
+            backRight.setPower(0.5);
+            backLeft.setPower(0.5);
+            outtake.setPower(-0.5);
+        }
+        else if (seconds >650){
+            leftMotor.setPower(0.0);
+            rightMotor.setPower(0.0);
+            backRight.setPower(0.0);
+            backLeft.setPower(0.0);
+            outtake.setPower(0.0);
+        }
+    seconds = seconds +1;
+
     }
 }
